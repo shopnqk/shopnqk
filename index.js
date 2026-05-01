@@ -314,14 +314,14 @@ client.on("interactionCreate", async interaction => {
     await interaction.deferUpdate();
 
     const links = {
-      flu: "https://www.mediafire.com/file/jwvk91kyhd1hdag/ob53_1.7.4.ipa/file",
-      migul: "https://ipa.authtool.app/view/69ef2cc3e95f3e47a8307b0c",
+      flu: "https://www.mediafire.com/file/k3svf4bojkf8216/FF_1.123.1_1.7.5.ipa/file",
+      migul: "https://www.mediafire.com/file/s2x8s3gqbqzwc8l/1777282124718-7ba56icev8t-Free_Fire_1.123.1_1777281616.ipa/file",
       tipa: "Chưa Update",
       adr: "https://www.mediafire.com/file/bie03xh4vag0edx/DRIPCLIENT_V1.3.TP.apks/file"
     };
 
     if (interaction.values[0] === "proxy") {
-      return interaction.editReply({ content: "🔒 Mua để được cấp Pem , Port & IP!", components: [] });
+      return interaction.editReply({ content: "https://proxyvip.click/aim-ports", components: [] });
     }
 
     return interaction.editReply({
