@@ -88,7 +88,7 @@ function box(text) {
 
 function createEmbed(data) {
   const status = (s) =>
-    s === "safe" ? box("➕ 🟢 An Toàn") : box("▬ 🔴 Cập Nhật");
+    s === "safe" ? box("➕ 🟢 An Toàn") : box("➖ 🔴 Cập Nhật");
 
   return new EmbedBuilder()
     .setColor("#00ffae")
