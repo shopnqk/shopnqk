@@ -23,7 +23,7 @@ const LOG_CHANNEL_ID = process.env.LOG_CHANNEL_ID;
 const BANK_ACC = process.env.BANK_ACC;
 const BANK_NAME = process.env.BANK_NAME || "MB";
 
-const THUMBNAIL = "https://files.catbox.moe/wpeovp.webp";
+const THUMBNAIL = "https://files.catbox.moe/77udqi.gif";
 
 const client = new Client({
   intents: [
@@ -92,19 +92,19 @@ function createEmbed(data) {
 
   return new EmbedBuilder()
     .setColor("#00ffae")
-    .setTitle("🚀 FREE FIRE HACK STATUS")
+    .setTitle("👑 SHOP KEY NQK")
     .setThumbnail(THUMBNAIL)
-    .setDescription("📡 The system updates in real time\n\u200B")
+    .setDescription("📡 Tút tút tút.....")
     .addFields(
       { name: "👑 FLUORITE", value: status(data["Fluorite"]) },
       { name: "💎 MIGUL VN", value: status(data["Migul VN"]) },
       { name: "⭐️ TIPA MIGUL", value: status(data["Tipa Migul"]) },
       { name: "🌐 PROXY AIM", value: status(data["Proxy Aim"]) },
       { name: "🤖 DRIP ADR", value: status(data["ADR"]) },
-      { name: "━━━━━━━━━━━━━━━━━━━━━━━", value: "📢 Auto Update • Chính xác • Realtime" }
+      { name: "━━━━━━━━━━━━━━━━━━━━━━━━━━", value: "📢 AutoBank • Uy Tín • Chất Lượng" }
     )
     .setImage("https://cdn.discordapp.com/attachments/1488240958712709291/1500397539742978099/IMG_4659.gif?ex=69f84999&is=69f6f819&hm=040340c069537f4776a7258461d755173fa081827364d1d3216f7b34d0d98f44&")
-    .setFooter({ text: "⚡ Premium Bot System - Status Time" })
+    .setFooter({ text: "⚡ Shop Key Premium - Status Time" })
     .setTimestamp();
 }
 
