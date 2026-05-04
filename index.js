@@ -92,16 +92,16 @@ function createEmbed(data) {
 
   return new EmbedBuilder()
     .setColor("#00ffae")
-    .setTitle("👑 SHOP KEY NQK")
+    .setTitle("💎 NQK PREMIUM STORE")
     .setThumbnail(THUMBNAIL)
-    .setDescription("📡 Tút tút tút.....")
+    .setDescription("✨ Best Quality • Instant Delivery ✨")
     .addFields(
       { name: "👑 FLUORITE", value: status(data["Fluorite"]) },
       { name: "💎 MIGUL VN", value: status(data["Migul VN"]) },
       { name: "⭐️ TIPA MIGUL", value: status(data["Tipa Migul"]) },
       { name: "🌐 PROXY AIM", value: status(data["Proxy Aim"]) },
       { name: "🤖 DRIP ADR", value: status(data["ADR"]) },
-      { name: "━━━━━━━━━━━━━━━━━━━━━━━━━━", value: "📢 AutoBank • Uy Tín • Chất Lượng" }
+      { name: "━━━━━━━━━━━━━━━━━━━━━━━━━━", value: "📢 Uy Tín • Chất Lượng • 24/7" }
     )
     .setImage("https://cdn.discordapp.com/attachments/1488240958712709291/1500397539742978099/IMG_4659.gif?ex=69f84999&is=69f6f819&hm=040340c069537f4776a7258461d755173fa081827364d1d3216f7b34d0d98f44&")
     .setFooter({ text: "⚡ Shop Key Premium - Status Time" })
