@@ -103,6 +103,7 @@ function createEmbed(data) {
       { name: "🤖 DRIP ADR", value: status(data["ADR"]) },
       { name: "━━━━━━━━━━━━━━━━━━━━━━━", value: "📢 Auto Update • Chính xác • Realtime" }
     )
+    .setImage("https://cdn.discordapp.com/attachments/1488240958712709291/1500397539742978099/IMG_4659.gif?ex=69f84999&is=69f6f819&hm=040340c069537f4776a7258461d755173fa081827364d1d3216f7b34d0d98f44&")
     .setFooter({ text: "⚡ Premium Bot System - Status Time" })
     .setTimestamp();
 }
