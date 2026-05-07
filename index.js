@@ -62,9 +62,11 @@ function generateOrderId() {
 
 function getExpireDate(time) {
   const now = new Date();
+
   if (time === "day") now.setDate(now.getDate() + 1);
   if (time === "week") now.setDate(now.getDate() + 7);
   if (time === "month") now.setMonth(now.getMonth() + 1);
+
   return now.toLocaleString("vi-VN");
 }
 
@@ -78,6 +80,7 @@ function formatName(type) {
     Migul_Lite: "Migul VN [Lite]",
     Migul_Pro: "Migul VN [Pro]"
   };
+
   return map[type] || type;
 }
 
@@ -88,7 +91,9 @@ function box(text) {
 
 function createEmbed(data) {
   const status = (s) =>
-    s === "safe" ? box("➕ 🟢 An Toàn") : box("➖ 🔴 Cập Nhật");
+    s === "safe"
+      ? box("➕ 🟢 An Toàn")
+      : box("➖ 🔴 Cập Nhật");
 
   return new EmbedBuilder()
     .setColor("#00ffae")
@@ -101,9 +106,12 @@ function createEmbed(data) {
       { name: "⭐️ TIPA MIGUL", value: status(data["Tipa Migul"]) },
       { name: "🌐 PROXY AIM", value: status(data["Proxy Aim"]) },
       { name: "🤖 DRIP ADR", value: status(data["ADR"]) },
-      { name: "━━━━━━━━━━━━━━━━━━━━━━━━━━", value: "📢 Uy Tín • Chất Lượng • 24/7" }
+      {
+        name: "━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        value: "📢 Uy Tín • Chất Lượng • 24/7"
+      }
     )
-    .setImage("https://cdn.discordapp.com/attachments/1488240958712709291/1500397539742978099/IMG_4659.gif?ex=69f84999&is=69f6f819&hm=040340c069537f4776a7258461d755173fa081827364d1d3216f7b34d0d98f44&")
+    .setImage("https://cdn.discordapp.com/attachments/1488240958712709291/1500397539742978099/IMG_4659.gif")
     .setFooter({ text: "⚡ Shop Key Premium - Status Time" })
     .setTimestamp();
 }
@@ -112,9 +120,20 @@ function createEmbed(data) {
 function createButtons() {
   return [
     new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId("buy_proxy").setLabel("🛒 Buy Key").setStyle(ButtonStyle.Success),
-      new ButtonBuilder().setCustomId("download_menu").setLabel("📥 Link Tải").setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId("edit_status").setLabel("👑 ADMIN").setStyle(ButtonStyle.Primary)
+      new ButtonBuilder()
+        .setCustomId("buy_proxy")
+        .setLabel("🛒 Buy Key")
+        .setStyle(ButtonStyle.Success),
+
+      new ButtonBuilder()
+        .setCustomId("download_menu")
+        .setLabel("📥 Link Tải")
+        .setStyle(ButtonStyle.Secondary),
+
+      new ButtonBuilder()
+        .setCustomId("edit_status")
+        .setLabel("👑 ADMIN")
+        .setStyle(ButtonStyle.Primary)
     )
   ];
 }
@@ -180,7 +199,7 @@ function proxyVipMenu() {
   return new ActionRowBuilder().addComponents(
     new StringSelectMenuBuilder()
       .setCustomId("proxy_vip_type")
-      .setPlaceholder("🌐 Select Proxy ")
+      .setPlaceholder("🌐 Select Proxy")
       .addOptions([
         { label: "Drag Định vị", value: "Drag_Antena" },
         { label: "Drag Ko Định vị", value: "Drag_NoAntena" },
@@ -213,19 +232,29 @@ const prices = {
   Fluorite: { day: 110000, week: 280000, month: 550000 },
   Migul_Lite: { day: 50000, week: 150000, month: 350000 },
   Migul_Pro: { day: 90000, week: 225000, month: 450000 },
+
   ADR: { week: 90000, month: 200000 },
   Tipa_Migul: { week: 70000, month: 150000 }
 };
 
 function timeMenu(type) {
   const p = prices[type];
+
   return new ActionRowBuilder().addComponents(
     new StringSelectMenuBuilder()
       .setCustomId(`time_${type}`)
       .addOptions([
-        ...(p.day ? [{ label: `Ngày - ${p.day}`, value: "day" }] : []),
-        ...(p.week ? [{ label: `Tuần - ${p.week}`, value: "week" }] : []),
-        ...(p.month ? [{ label: `Tháng - ${p.month}`, value: "month" }] : [])
+        ...(p.day
+          ? [{ label: `Ngày - ${p.day}`, value: "day" }]
+          : []),
+
+        ...(p.week
+          ? [{ label: `Tuần - ${p.week}`, value: "week" }]
+          : []),
+
+        ...(p.month
+          ? [{ label: `Tháng - ${p.month}`, value: "month" }]
+          : [])
       ])
   );
 }
@@ -233,35 +262,44 @@ function timeMenu(type) {
 // ===== QR =====
 function createQR(amount, userId, type, time, orderId) {
   const content = `${orderId} ${type} ${time} ID${userId}`;
+
   return `https://img.vietqr.io/image/${BANK_NAME}-${BANK_ACC}-compact.png?amount=${amount}&addInfo=${encodeURIComponent(content)}`;
 }
 
-// ===== READY (FIX RESET) =====
+// ===== READY =====
 client.once("ready", async () => {
   const data = loadData();
+
   const ch = await client.channels.fetch(CHANNEL_ID);
 
   try {
     if (data.messageId) {
       const msg = await ch.messages.fetch(data.messageId);
+
       await msg.edit({
         embeds: [createEmbed(data)],
         components: createButtons()
       });
+
     } else {
       const msg = await ch.send({
         embeds: [createEmbed(data)],
         components: createButtons()
       });
+
       data.messageId = msg.id;
+
       saveData(data);
     }
+
   } catch {
     const msg = await ch.send({
       embeds: [createEmbed(data)],
       components: createButtons()
     });
+
     data.messageId = msg.id;
+
     saveData(data);
   }
 
@@ -270,307 +308,553 @@ client.once("ready", async () => {
 
 // ===== INTERACTION =====
 client.on("interactionCreate", async interaction => {
-  if (!interaction.isButton() && !interaction.isStringSelectMenu() && !interaction.isModalSubmit()) return;
-
-  // ===== ADMIN =====
-  if (interaction.customId === "edit_status") {
-    if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-      return interaction.reply({ content: "⚠️ Bạn không phải ADMIN !?!", ephemeral: true });
-    }
-    return interaction.reply({ content: "📦 Select Hack:", components: [statusToolMenu()], ephemeral: true });
-  }
-
-  if (interaction.customId === "status_tool") {
-    return interaction.update({
-      content: "🛠 Edit:",
-      components: [statusValueMenu(interaction.values[0])]
-    });
-  }
-
-  if (interaction.customId.startsWith("status_value_")) {
-    const tool = interaction.customId.replace("status_value_", "");
-    const value = interaction.values[0];
-
-    const data = loadData();
-    data[tool] = value;
-    saveData(data);
-
-    const channel = await client.channels.fetch(CHANNEL_ID);
-    const msg = await channel.messages.fetch(data.messageId);
-
-    await msg.edit({
-      embeds: [createEmbed(data)],
-      components: createButtons()
-    });
-
-    return interaction.update({ content: "📬 Đã chỉnh sửa!", components: [] });
-  }
-
-  // ===== DOWNLOAD =====
-  if (interaction.customId === "download_menu") {
-    return interaction.reply({ content: "📥 Chọn hack:", components: [downloadMenu()], ephemeral: true });
-  }
-
-  if (interaction.customId === "download_select") {
-    await interaction.deferUpdate();
-
-    const links = {
-      flu: "https://www.mediafire.com/file/k3svf4bojkf8216/FF_1.123.1_1.7.5.ipa/file",
-      migul: "https://www.mediafire.com/file/s2x8s3gqbqzwc8l/1777282124718-7ba56icev8t-Free_Fire_1.123.1_1777281616.ipa/file",
-      tipa: "Chưa Update",
-      adr: "https://www.mediafire.com/file/bie03xh4vag0edx/DRIPCLIENT_V1.3.TP.apks/file"
-    };
-
-    if (interaction.values[0] === "proxy") {
-      return interaction.editReply({ content: "https://proxyvip.click/aim-ports", components: [] });
-    }
-
-    return interaction.editReply({
-      embeds: [new EmbedBuilder().setTitle("📥 Link tải").setDescription(links[interaction.values[0]])],
-      components: []
-    });
-  }
-
-  // ===== BUY =====
-  if (interaction.customId === "buy_proxy") {
-    return interaction.reply({ content: "🛒 Chọn loại:", components: [proxyMenu()], ephemeral: true });
-  }
-
-  if (interaction.customId === "proxy_type") {
-    await interaction.deferUpdate();
-
-    if (interaction.values[0] === "proxy_vip") {
-      return interaction.editReply({
-        content: "📩 Chọn Proxy:",
-        components: [proxyVipMenu()]
-      });
-    }
-
-    if (interaction.values[0] === "Migul") {
-      return interaction.editReply({
-        content: "🗂 Chọn phiên bản:",
-        components: [migulMenu()]
-      });
-    }
-
-    return interaction.editReply({
-      content: "⏳ Chọn thời hạn:",
-      components: [timeMenu(interaction.values[0])]
-    });
-  }
-
-  if (interaction.customId === "proxy_vip_type") {
-    await interaction.deferUpdate();
-    return interaction.editReply({
-      content: "⏳ Chọn thời hạn:",
-      components: [timeMenu(interaction.values[0])]
-    });
-  }
-
-  if (interaction.customId === "migul_type") {
-    await interaction.deferUpdate();
-    return interaction.editReply({
-      content: "⏳ Chọn thời hạn:",
-      components: [timeMenu(interaction.values[0])]
-    });
-  }
-
-  if (interaction.customId.startsWith("time_")) {
-    await interaction.deferUpdate();
-
-    if (orders.has(interaction.user.id)) {
-      return interaction.editReply({ content: "⚠️ Lỗi ! Đơn hàng trước đó chưa xử lí .", components: [] });
-    }
-
-    const type = interaction.customId.replace("time_", "");
-    const time = interaction.values[0];
-    const price = prices[type]?.[time];
-
-    const orderId = generateOrderId();
-    orders.set(interaction.user.id, { type, time, price, orderId });
-
-    const qr = createQR(price, interaction.user.id, type, time, orderId);
-
-    return interaction.editReply({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("💳 Thanh toán")
-          .setDescription(`📌 Nội dung CK: \`${orderId}\``)
-          .setImage(qr)
-          .addFields(
-            { name: "🧾 Mã đơn", value: orderId },
-            { name: "📦 Vật phẩm", value: `${formatName(type)} (${time})` },
-            { name: "💸 Giá", value: `${price.toLocaleString()}đ` },
-            { name: "⚠️ Lưu ý", value: `VUI LÒNG BANK MỚI XÁC NHẬN` } 
-          )
-      ],
-      components: [
-        new ActionRowBuilder().addComponents(
-          new ButtonBuilder().setCustomId("confirm_bank").setLabel("📩 Yêu cầu").setStyle(ButtonStyle.Success)
-        )
-      ]
-    });
-  }
-
-  if (interaction.customId === "confirm_bank") {
-    const order = orders.get(interaction.user.id);
-    if (!order) return interaction.reply({ content: "❌ Đơn không tồn tại!", ephemeral: true });
-
-    const logChannel = await client.channels.fetch(LOG_CHANNEL_ID);
-
-    const embed = new EmbedBuilder()
-      .setTitle("📩 Đơn hàng")
-      .addFields(
-        { name: "🧾 Mã đơn", value: order.orderId },
-        { name: "👤 Người mua", value: `<@${interaction.user.id}>` },
-        { name: "📦 Vật phẩm", value: `${formatName(order.type)} (${order.time})` },
-        { name: "💸 Giá", value: `${order.price.toLocaleString()}đ` }
-      );
-
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId(`approve_${interaction.user.id}`).setLabel("🔑 Key").setStyle(ButtonStyle.Success),
-      new ButtonBuilder().setCustomId(`reject_${interaction.user.id}`).setLabel("❌ Huỷ").setStyle(ButtonStyle.Danger)
-    );
-
-    await logChannel.send({ embeds: [embed], components: [row] });
-
-    await interaction.update({ components: [] });
-
-    return interaction.followUp({ content: "🧾 Đơn hàng của bạn đã được gửi", ephemeral: true });
-  }
-
-  // ===== APPROVE =====
-// ===== APPROVE BUTTON =====
-if (interaction.customId.startsWith("approve_")) {
-  if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-    return interaction.reply({ content: "Cần role ADMIN để thực hiện!", ephemeral: true });
-  }
-
-  const userId = interaction.customId.split("_")[1];
-
-  const modal = new ModalBuilder()
-    .setCustomId(`sendkey_${userId}`)
-    .setTitle("Nhập key");
-
-  const input = new TextInputBuilder()
-    .setCustomId("key")
-    .setLabel("Key")
-    .setStyle(TextInputStyle.Short)
-    .setRequired(true);
-
-  modal.addComponents(new ActionRowBuilder().addComponents(input));
-
-  return interaction.showModal(modal);
-}
-
-
-// ===== MODAL SUBMIT (SEND KEY) =====
-if (interaction.isModalSubmit() && interaction.customId.startsWith("sendkey_")) {
-  if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-    return interaction.reply({ content: "Cần role ADMIN để thực hiện!", ephemeral: true });
-  }
-
-  const userId = interaction.customId.split("_")[1];
-  const key = interaction.fields.getTextInputValue("key");
-
-  const order = orders.get(userId);
-  if (!order) {
-    return interaction.reply({ content: "❌ Đơn không tồn tại!", ephemeral: true });
-  }
-
-  const expire = getExpireDate(order.time);
 
   try {
-    const user = await client.users.fetch(userId);
 
-    await user.send({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("🧾 Hoá đơn")
-          .setColor("Green")
-          .addFields(
-            { name: "🧾 Mã đơn", value: order.orderId },
-            { name: "📦 Vật phẩm", value: `${formatName(order.type)} (${order.time})` },
-            { name: "💸 Giá", value: `${order.price.toLocaleString()}đ` },
-            { name: "⏳ HSD", value: expire },
-            { name: "🔑 Key", value: `\`${key}\`` },
-            { name: "🌐 Trạng thái", value: "Đã duyệt đơn" }
-          )
-      ]
-    });
-  } catch (err) {
-    return interaction.reply({
-      content: "❌ Không thể gửi DM cho user (user tắt DM)!",
-      ephemeral: true
-    });
-  }
+    if (
+      !interaction.isButton() &&
+      !interaction.isStringSelectMenu() &&
+      !interaction.isModalSubmit()
+    ) return;
 
-  // ===== UPDATE EMBED ADMIN =====
-  const oldEmbed = interaction.message.embeds[0];
+    // ===== ADMIN =====
+    if (interaction.customId === "edit_status") {
 
-  const updatedEmbed = EmbedBuilder.from(oldEmbed)
-    .setColor("Green")
-    .setFields(
-      ...oldEmbed.fields.filter(f => !f.name.includes("Trạng thái")),
-      { name: "✅ Trạng thái", value: "Đã duyệt" }
-    );
-
-  await interaction.message.edit({
-    embeds: [updatedEmbed],
-    components: []
-  });
-
-  orders.delete(userId);
-
-  return interaction.reply({ content: "✅ Đã duyệt!", ephemeral: true });
-}
-
-  // ===== REJECT =====
-if (interaction.customId.startsWith("reject_")) {
-  const userId = interaction.customId.split("_")[1];
-  const order = orders.get(userId);
-
-  if (!order) {
-    return interaction.reply({ content: "❌ Đơn không tồn tại!", ephemeral: true });
-  }
-
-  const user = await client.users.fetch(userId);
-  const expire = getExpireDate(order.time);
-
-  // 🔑 Có thể random key fake hoặc để "Không có"
-  const fakeKey = "NULL-KEY-REJECT";
-
-  // ===== GỬI EMBED GIỐNG DUYỆT =====
-  await user.send({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle("🧾 Hoá đơn")
-        .setColor("Red")
-        .addFields(
-          { name: "🧾 Mã đơn", value: order.orderId },
-          { name: "📦 Vật phẩm", value: `${formatName(order.type)} (${order.time})` },
-          { name: "💸 Giá", value: `${order.price.toLocaleString()}đ` },
-          { name: "⏳ HSD", value: expire },
-          { name: "🌐 Trạng thái", value: `Đéo bank mà đòi có key` }
+      if (
+        !interaction.member.permissions.has(
+          PermissionsBitField.Flags.Administrator
         )
-    ]
-  });
+      ) {
+        return interaction.reply({
+          content: "⚠️ Bạn không phải ADMIN !?!",
+          ephemeral: true
+        });
+      }
 
-  // ===== UPDATE EMBED ADMIN =====
-  const oldEmbed = interaction.message.embeds[0];
-  const updatedEmbed = EmbedBuilder.from(oldEmbed)
-    .setColor("Red")
-    .setFields(
-      ...oldEmbed.fields.filter(f => !f.name.includes("Trạng thái")),
-      { name: "❌ Trạng thái", value: "Đã từ chối" }
-    );
+      return interaction.reply({
+        content: "📦 Select Hack:",
+        components: [statusToolMenu()],
+        ephemeral: true
+      });
+    }
 
-  await interaction.message.edit({ embeds: [updatedEmbed], components: [] });
+    if (interaction.customId === "status_tool") {
 
-  orders.delete(userId);
+      return interaction.update({
+        content: "🛠 Edit:",
+        components: [statusValueMenu(interaction.values[0])]
+      });
+    }
 
-  return interaction.reply({ content: "❌ Đã từ chối!", ephemeral: true });
-}
+    if (interaction.customId.startsWith("status_value_")) {
+
+      const tool = interaction.customId.replace(
+        "status_value_",
+        ""
+      );
+
+      const value = interaction.values[0];
+
+      const data = loadData();
+
+      data[tool] = value;
+
+      saveData(data);
+
+      const channel = await client.channels.fetch(CHANNEL_ID);
+
+      const msg = await channel.messages.fetch(data.messageId);
+
+      await msg.edit({
+        embeds: [createEmbed(data)],
+        components: createButtons()
+      });
+
+      return interaction.update({
+        content: "📬 Đã chỉnh sửa!",
+        components: []
+      });
+    }
+
+    // ===== DOWNLOAD =====
+    if (interaction.customId === "download_menu") {
+
+      return interaction.reply({
+        content: "📥 Chọn hack:",
+        components: [downloadMenu()],
+        ephemeral: true
+      });
+    }
+
+    if (interaction.customId === "download_select") {
+
+      await interaction.deferUpdate();
+
+      const links = {
+        flu: "https://www.mediafire.com/file/k3svf4bojkf8216/FF_1.123.1_1.7.5.ipa/file",
+        migul: "https://www.mediafire.com/file/s2x8s3gqbqzwc8l/1777282124718-7ba56icev8t-Free_Fire_1.123.1_1777281616.ipa/file",
+        tipa: "Chưa Update",
+        adr: "https://www.mediafire.com/file/bie03xh4vag0edx/DRIPCLIENT_V1.3.TP.apks/file"
+      };
+
+      if (interaction.values[0] === "proxy") {
+
+        return interaction.editReply({
+          content: "https://proxyvip.click/aim-ports",
+          components: []
+        });
+      }
+
+      return interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("📥 Link tải")
+            .setDescription(links[interaction.values[0]])
+        ],
+        components: []
+      });
+    }
+
+    // ===== BUY =====
+    if (interaction.customId === "buy_proxy") {
+
+      return interaction.reply({
+        content: "🛒 Chọn loại:",
+        components: [proxyMenu()],
+        ephemeral: true
+      });
+    }
+
+    if (interaction.customId === "proxy_type") {
+
+      await interaction.deferUpdate();
+
+      if (interaction.values[0] === "proxy_vip") {
+
+        return interaction.editReply({
+          content: "📩 Chọn Proxy:",
+          components: [proxyVipMenu()]
+        });
+      }
+
+      if (interaction.values[0] === "Migul") {
+
+        return interaction.editReply({
+          content: "🗂 Chọn phiên bản:",
+          components: [migulMenu()]
+        });
+      }
+
+      return interaction.editReply({
+        content: "⏳ Chọn thời hạn:",
+        components: [timeMenu(interaction.values[0])]
+      });
+    }
+
+    if (interaction.customId === "proxy_vip_type") {
+
+      await interaction.deferUpdate();
+
+      return interaction.editReply({
+        content: "⏳ Chọn thời hạn:",
+        components: [timeMenu(interaction.values[0])]
+      });
+    }
+
+    if (interaction.customId === "migul_type") {
+
+      await interaction.deferUpdate();
+
+      return interaction.editReply({
+        content: "⏳ Chọn thời hạn:",
+        components: [timeMenu(interaction.values[0])]
+      });
+    }
+
+    if (interaction.customId.startsWith("time_")) {
+
+      await interaction.deferUpdate();
+
+      if (orders.has(interaction.user.id)) {
+
+        return interaction.editReply({
+          content: "⚠️ Lỗi ! Đơn hàng trước đó chưa xử lí .",
+          components: []
+        });
+      }
+
+      const type = interaction.customId.replace("time_", "");
+
+      const time = interaction.values[0];
+
+      const price = prices[type]?.[time];
+
+      const orderId = generateOrderId();
+
+      orders.set(interaction.user.id, {
+        type,
+        time,
+        price,
+        orderId
+      });
+
+      const qr = createQR(
+        price,
+        interaction.user.id,
+        type,
+        time,
+        orderId
+      );
+
+      return interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("💳 Thanh toán")
+            .setDescription(`📌 Nội dung CK: \`${orderId}\``)
+            .setImage(qr)
+            .addFields(
+              {
+                name: "🧾 Mã đơn",
+                value: orderId
+              },
+              {
+                name: "📦 Vật phẩm",
+                value: `${formatName(type)} (${time})`
+              },
+              {
+                name: "💸 Giá",
+                value: `${price.toLocaleString()}đ`
+              },
+              {
+                name: "⚠️ Lưu ý",
+                value: "VUI LÒNG BANK MỚI XÁC NHẬN"
+              }
+            )
+        ],
+
+        components: [
+          new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+              .setCustomId("confirm_bank")
+              .setLabel("📩 Yêu cầu")
+              .setStyle(ButtonStyle.Success)
+          )
+        ]
+      });
+    }
+
+    // ===== CONFIRM =====
+    if (interaction.customId === "confirm_bank") {
+
+      const order = orders.get(interaction.user.id);
+
+      if (!order) {
+        return interaction.reply({
+          content: "❌ Đơn không tồn tại!",
+          ephemeral: true
+        });
+      }
+
+      const logChannel = await client.channels.fetch(
+        LOG_CHANNEL_ID
+      );
+
+      const embed = new EmbedBuilder()
+        .setTitle("📩 Đơn hàng")
+        .addFields(
+          {
+            name: "🧾 Mã đơn",
+            value: order.orderId
+          },
+          {
+            name: "👤 Người mua",
+            value: `<@${interaction.user.id}>`
+          },
+          {
+            name: "📦 Vật phẩm",
+            value: `${formatName(order.type)} (${order.time})`
+          },
+          {
+            name: "💸 Giá",
+            value: `${order.price.toLocaleString()}đ`
+          }
+        );
+
+      await logChannel.send({
+        embeds: [embed],
+        components: [
+          new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+              .setCustomId(`shop_approve_${interaction.user.id}`)
+              .setLabel("🔑 Key")
+              .setStyle(ButtonStyle.Success),
+
+            new ButtonBuilder()
+              .setCustomId(`shop_reject_${interaction.user.id}`)
+              .setLabel("❌ Huỷ")
+              .setStyle(ButtonStyle.Danger)
+          )
+        ]
+      });
+
+      await interaction.update({
+        components: []
+      });
+
+      return interaction.followUp({
+        content: "🧾 Đơn hàng của bạn đã được gửi",
+        ephemeral: true
+      });
+    }
+
+    // ===== APPROVE =====
+    if (
+      interaction.isButton() &&
+      interaction.customId.startsWith("shop_approve_")
+    ) {
+
+      if (
+        !interaction.member.permissions.has(
+          PermissionsBitField.Flags.Administrator
+        )
+      ) {
+        return interaction.reply({
+          content: "Cần role ADMIN để thực hiện!",
+          ephemeral: true
+        });
+      }
+
+      const userId =
+        interaction.customId.split("_")[2];
+
+      const modal = new ModalBuilder()
+        .setCustomId(`shop_sendkey_${userId}`)
+        .setTitle("Nhập key");
+
+      const input = new TextInputBuilder()
+        .setCustomId("key")
+        .setLabel("Key")
+        .setStyle(TextInputStyle.Short)
+        .setRequired(true);
+
+      modal.addComponents(
+        new ActionRowBuilder().addComponents(input)
+      );
+
+      return interaction.showModal(modal);
+    }
+
+    // ===== SEND KEY =====
+    if (
+      interaction.isModalSubmit() &&
+      interaction.customId.startsWith("shop_sendkey_")
+    ) {
+
+      if (
+        !interaction.member.permissions.has(
+          PermissionsBitField.Flags.Administrator
+        )
+      ) {
+        return interaction.reply({
+          content: "Cần role ADMIN để thực hiện!",
+          ephemeral: true
+        });
+      }
+
+      const userId =
+        interaction.customId.split("_")[2];
+
+      const key =
+        interaction.fields.getTextInputValue("key");
+
+      const order = orders.get(userId);
+
+      if (!order) {
+
+        return interaction.reply({
+          content: "❌ Đơn không tồn tại!",
+          ephemeral: true
+        });
+      }
+
+      const expire = getExpireDate(order.time);
+
+      const user = await client.users.fetch(userId);
+
+      await user.send({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("🧾 Hoá đơn")
+            .setColor("Green")
+            .addFields(
+              {
+                name: "🧾 Mã đơn",
+                value: order.orderId
+              },
+              {
+                name: "📦 Vật phẩm",
+                value: `${formatName(order.type)} (${order.time})`
+              },
+              {
+                name: "💸 Giá",
+                value: `${order.price.toLocaleString()}đ`
+              },
+              {
+                name: "⏳ HSD",
+                value: expire
+              },
+              {
+                name: "🔑 Key",
+                value: `\`${key}\``
+              },
+              {
+                name: "🌐 Trạng thái",
+                value: "Đã duyệt đơn"
+              }
+            )
+        ]
+      });
+
+      const channel = await client.channels.fetch(
+        LOG_CHANNEL_ID
+      );
+
+      const messages = await channel.messages.fetch({
+        limit: 20
+      });
+
+      const targetMsg = messages.find(m =>
+        m.components[0]?.components?.some(c =>
+          c.customId?.includes(userId)
+        )
+      );
+
+      if (targetMsg) {
+
+        const oldEmbed = targetMsg.embeds[0];
+
+        const updatedEmbed =
+          EmbedBuilder.from(oldEmbed)
+            .setColor("Green")
+            .setFields(
+              ...oldEmbed.fields.filter(
+                f => !f.name.includes("Trạng thái")
+              ),
+              {
+                name: "✅ Trạng thái",
+                value: "Đã duyệt"
+              }
+            );
+
+        await targetMsg.edit({
+          embeds: [updatedEmbed],
+          components: []
+        });
+      }
+
+      orders.delete(userId);
+
+      return interaction.reply({
+        content: "✅ Đã duyệt!",
+        ephemeral: true
+      });
+    }
+
+    // ===== REJECT =====
+    if (
+      interaction.isButton() &&
+      interaction.customId.startsWith("shop_reject_")
+    ) {
+
+      const userId =
+        interaction.customId.split("_")[2];
+
+      const order = orders.get(userId);
+
+      if (!order) {
+
+        return interaction.reply({
+          content: "❌ Đơn không tồn tại!",
+          ephemeral: true
+        });
+      }
+
+      const user = await client.users.fetch(userId);
+
+      const expire = getExpireDate(order.time);
+
+      await user.send({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("🧾 Hoá đơn")
+            .setColor("Red")
+            .addFields(
+              {
+                name: "🧾 Mã đơn",
+                value: order.orderId
+              },
+              {
+                name: "📦 Vật phẩm",
+                value: `${formatName(order.type)} (${order.time})`
+              },
+              {
+                name: "💸 Giá",
+                value: `${order.price.toLocaleString()}đ`
+              },
+              {
+                name: "⏳ HSD",
+                value: expire
+              },
+              {
+                name: "🌐 Trạng thái",
+                value: "Vui lòng hoàn thành thanh toán"
+              }
+            )
+        ]
+      });
+
+      const oldEmbed = interaction.message.embeds[0];
+
+      const updatedEmbed =
+        EmbedBuilder.from(oldEmbed)
+          .setColor("Red")
+          .setFields(
+            ...oldEmbed.fields.filter(
+              f => !f.name.includes("Trạng thái")
+            ),
+            {
+              name: "❌ Trạng thái",
+              value: "Đã từ chối"
+            }
+          );
+
+      await interaction.message.edit({
+        embeds: [updatedEmbed],
+        components: []
+      });
+
+      orders.delete(userId);
+
+      return interaction.reply({
+        content: "❌ Đã từ chối!",
+        ephemeral: true
+      });
+    }
+
+  } catch (err) {
+    console.log(err);
+
+    if (!interaction.replied && !interaction.deferred) {
+
+      return interaction.reply({
+        content: "❌ Interaction Error",
+        ephemeral: true
+      });
+    }
+  }
 });
+
+process.on("unhandledRejection", console.error);
+process.on("uncaughtException", console.error);
 
 client.login(TOKEN);
