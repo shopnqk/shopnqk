@@ -392,8 +392,8 @@ client.on("interactionCreate", async interaction => {
 
       const links = {
         flu: "https://www.mediafire.com/file/k3svf4bojkf8216/FF_1.123.1_1.7.5.ipa/file",
-        migul: "https://www.mediafire.com/file/s2x8s3gqbqzwc8l/1777282124718-7ba56icev8t-Free_Fire_1.123.1_1777281616.ipa/file",
-        tipa: "Chưa Update",
+        migul: "https://ipa.authtool.app/view/69fcbf0ae95f3e47a85006b2",
+        tipa: "https://www.mediafire.com/file/2y5ihusa9wvzg77/AimBot.tipa/file",
         adr: "https://www.mediafire.com/file/bie03xh4vag0edx/DRIPCLIENT_V1.3.TP.apks/file"
       };
 
