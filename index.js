@@ -392,7 +392,7 @@ client.on("interactionCreate", async interaction => {
 
       const links = {
         flu: "https://www.mediafire.com/file/srt9e6co26n4z3c/FF_1.123.1_1.7.6.ipa/file",
-        migul: "https://api.moniteauth.com/telegram/download/961d9dfdd16e81d6799a7e8081633ac2dc30880a",
+        migul: "https://api.moniteauth.com/telegram/download/1868265a7fab1491184bc746bc734be247f9e8b2",
         tipa: "https://www.mediafire.com/file/2y5ihusa9wvzg77/AimBot.tipa/file",
         adr: "https://www.mediafire.com/file/2n66tzo3y3cbxqi/DRIPCLIENT_v3.2v.apks/file"
       };
