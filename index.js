@@ -92,8 +92,8 @@ function box(text) {
 function createEmbed(data) {
   const status = (s) =>
     s === "safe"
-      ? box("➕ 🟢 An Toàn")
-      : box("➖ 🔴 Cập Nhật");
+      ? box("➕ 🟢 Anti Ban")
+      : box("➖ 🔴 Bảo Trì");
 
   return new EmbedBuilder()
     .setColor("#00ffae")
@@ -112,7 +112,7 @@ function createEmbed(data) {
       }
     )
     .setImage("https://cdn.discordapp.com/attachments/1488240958712709291/1500397539742978099/IMG_4659.gif")
-    .setFooter({ text: "⚡ Shop Key Premium - Status Time" })
+    .setFooter({ text: "⚡ Shop Key Premium - Status Real Time" })
     .setTimestamp();
 }
 
