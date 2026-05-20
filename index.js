@@ -223,13 +223,13 @@ function migulMenu() {
 
 // ===== PRICES =====
 const prices = {
-  Drag_Antena: { week: 100000, month: 200000 },
-  Drag_NoAntena: { week: 120000, month: 220000 },
-  Body_NoAntena: { week: 90000, month: 180000 },
-  Bung_Antena: { week: 100000, month: 200000 },
-  Bung_NoAntena: { week: 100000, month: 200000 },
+  Drag_Antena: { week: 70000, month: 140000 },
+  Drag_NoAntena: { week: 70000, month: 140000 },
+  Body_NoAntena: { week: 70000, month: 15000 },
+  Bung_Antena: { week: 70000, month: 150000 },
+  Bung_NoAntena: { week: 70000, month: 150000 },
 
-  Fluorite: { day: 110000, week: 280000, month: 550000 },
+  Fluorite: { day: 100000, week: 250000, month: 350000 },
   Migul_Lite: { day: 50000, week: 150000, month: 350000 },
   Migul_Pro: { day: 90000, week: 225000, month: 450000 },
 
